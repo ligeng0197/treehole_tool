@@ -3,16 +3,17 @@ import json
 import os
 import asyncio
 from openai import AsyncOpenAI
+from utils import get_config
 
-with open("user.config", "r", encoding="utf-8") as f:
-    user_config = json.load(f)
+openai_api_key = get_config("openai_api_key")
 
 client = AsyncOpenAI(
-    api_key=user_config["openai_api_key"],
+    api_key=openai_api_key,
     base_url="https://aihubmix.com/v1"
 )
 
 evaluated_posts_file = "evaluated_posts.json"
+max_posts = get_config("max_posts", 500)  # Use a default value if not found
 
 async def evaluate(content):
     try:
@@ -67,10 +68,12 @@ async def run_evaluator():
         print(f"✅ 本轮处理了 {processed_count} 个帖子")
 
         if updated:
+            # Limit the number of evaluated posts to the most recent 400
+            evaluated_posts = dict(list(evaluated_posts.items())[-400:])
             with open(evaluated_posts_file, "w", encoding="utf-8") as f:
                 json.dump(evaluated_posts, f, ensure_ascii=False, indent=2)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(get_config("sleep_time", 60))
 
 if __name__ == "__main__":
     asyncio.run(run_evaluator())

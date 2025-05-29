@@ -4,7 +4,9 @@
 
 ### 安装
 
-1.  安装依赖：
+1.  在根目录配置 `user.config` (从 `example/user.config` 复制 `example/user.config` 并填入你的 OpenAI API Key 和企业微信机器人链接) 用于调用大模型进行评估和发送通知。请先在企业微信创建群组后添加机器人，然后把机器人链接填入 `user.config`。
+
+2.  安装依赖：
 
     ```bash
     pip install -r requirements.txt
@@ -18,14 +20,12 @@
     python app.py
     ```
 
-    这个文件会同时运行 `fetcher.py` 和 `evaluator.py`，实现自动抓取、评估和筛选树洞帖子。
+    这个文件会同时运行 `fetcher.py`、`evaluator.py` 和 `notify.py`，实现自动抓取、评估、筛选树洞帖子以及发送通知。
 
 ### 文件说明
 
 *   `fetcher.py`: 负责从北京大学树洞抓取帖子，并将结果保存到 `treehole_posts.json` 文件中。
 *   `evaluator.py`: 负责读取 `treehole_posts.json` 中的帖子，使用 OpenAI API 评估帖子内容是否与羽毛球场地相关，并将评估结果保存到 `evaluated_posts.json` 文件中。
-*   `requirements.txt`: 包含了项目所需的 Python 依赖包。
-*   `.gitignore`: 指定了 Git 仓库应该忽略的文件和目录。
-
-
-
+*   `notify.py`: 负责读取 `evaluated_posts.json` 中的帖子，使用企业微信机器人发送通知。
+*   `utils.py`: 包含了一些常用的工具函数，如获取配置等。
+*   `user.config`: 配置文件，用于存储 OpenAI API Key 和企业微信机器人链接。

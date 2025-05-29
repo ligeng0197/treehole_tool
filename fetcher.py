@@ -4,6 +4,9 @@ import json
 from datetime import datetime
 import os
 from playwright.async_api import async_playwright
+from utils import get_config
+
+max_posts = get_config("max_posts", 400)
 
 async def extract_posts(page):
     posts = []
@@ -58,8 +61,8 @@ def save_posts(posts, filename="treehole_posts.json"):
             new_posts.append(post)
 
     all_posts = existing_posts + new_posts
-    if len(all_posts) > 400:
-        all_posts = all_posts[-400:]
+    if len(all_posts) > max_posts:
+        all_posts = all_posts[-max_posts:]
 
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(all_posts, f, ensure_ascii=False, indent=2)
@@ -82,7 +85,7 @@ async def run_fetcher():
             posts = await extract_posts(page)
             saved_count = save_posts(posts)
             print(f"✅ 成功抓取并保存 {saved_count} 条帖子")
-            await asyncio.sleep(60)
+            await asyncio.sleep(get_config("sleep_time", 60))
 
 if __name__ == "__main__":
     asyncio.run(run_fetcher())
