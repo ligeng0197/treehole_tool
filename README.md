@@ -4,12 +4,12 @@
 
 ## 介绍
 
-本项目旨在抓取北京大学树洞中关于羽毛球场地的信息，并进行分析。
+本项目旨在及时检测北京大学树洞中关于羽毛球场地的信息并通知。一旦检测到有人出场一分钟内企业微信通知到手机，方便使用者及时捡漏，解决当天想打球但缺场/无场/掉进树洞的困境。
 
 
 ### 安装
 
-1.  在根目录配置 `user.config` (从 `example/user.config.example` 复制并填入你的 OpenAI API Key 和企业微信机器人链接) 用于调用大模型进行评估和发送通知。请先在企业微信创建群组后添加机器人，然后把机器人链接填入 `user.config`。
+1.  在根目录配置 `user.config` (从 `example/user.config.example` 复制并填入你的 [AiHubMix](https://aihubmix.com/token) API Key 和企业微信机器人链接 [创建方法](https://open.work.weixin.qq.com/help2/pc/14931)) 用于调用大模型进行评估和发送通知。请先在企业微信创建群组后添加机器人，然后把机器人链接填入 `user.config`。
 
 2.  安装依赖：
 
