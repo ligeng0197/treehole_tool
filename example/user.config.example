@@ -1,0 +1,6 @@
+{
+  "openai_api_key": "sk-########################",
+  "max_posts": 500,
+  "sleep_time": 60,
+  "wecom_robot_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=###############"
+}

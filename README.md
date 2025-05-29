@@ -4,7 +4,7 @@
 
 ### 安装
 
-1.  在根目录配置 `user.config` (从 `example/user.config` 复制 `example/user.config` 并填入你的 OpenAI API Key 和企业微信机器人链接) 用于调用大模型进行评估和发送通知。请先在企业微信创建群组后添加机器人，然后把机器人链接填入 `user.config`。
+1.  在根目录配置 `user.config` (从 `example/user.config.example` 复制并填入你的 OpenAI API Key 和企业微信机器人链接) 用于调用大模型进行评估和发送通知。请先在企业微信创建群组后添加机器人，然后把机器人链接填入 `user.config`。
 
 2.  安装依赖：
 
