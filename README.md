@@ -1,7 +1,8 @@
+<img src="example/example.jpg" width="300">
+
 ## 介绍
 
 本项目旨在抓取北京大学树洞中关于羽毛球场地的信息，并进行分析。
-![example](example/example.jpg)
 
 
 ### 安装
