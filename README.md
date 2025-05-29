@@ -1,4 +1,6 @@
-<img src="example/example.jpg" width="300">
+<p align="center">
+  <img src="example/example.jpg" width="600">
+</p>
 
 ## 介绍
 
@@ -23,6 +25,8 @@
     python app.py
     ```
 
+    **注意：** 每次启动后，`fetcher.py` 会首先尝试登录树洞，请手动完成登录，注意每天短信验证码次数有限制（5次）。登录完成后，在命令行回车，程序将开始运行。
+
     这个文件会同时运行 `fetcher.py`、`evaluator.py` 和 `notify.py`，实现自动抓取、评估、筛选树洞帖子以及发送通知。
 
 ### 文件说明
@@ -32,3 +36,8 @@
 *   `notify.py`: 负责读取 `evaluated_posts.json` 中的帖子，使用企业微信机器人发送通知。
 *   `utils.py`: 包含了一些常用的工具函数，如获取配置等。
 *   `user.config`: 配置文件，用于存储 OpenAI API Key 和企业微信机器人链接。
+
+
+### 友情提示
+
+本项目一开始设计为自用（实在约不到羽毛球场TAT），如有需要，可以添加功能和维护，例如支持本地部署服务器（珍惜￥￥）。
