@@ -6,29 +6,38 @@ from openai import AsyncOpenAI
 from utils import get_config
 
 openai_api_key = get_config("openai_api_key")
+use_openai = get_config("use_openai")
 
-client = AsyncOpenAI(
-    api_key=openai_api_key,
-    base_url="https://aihubmix.com/v1"
-)
+if use_openai:
+    client = AsyncOpenAI(
+        api_key=openai_api_key,
+        base_url="https://aihubmix.com/v1"
+    )
 
 evaluated_posts_file = "evaluated_posts.json"
 max_posts = get_config("max_posts", 500)  # Use a default value if not found
 
 async def evaluate(content):
-    try:
-        response = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "你是一个助手，用于判断给定的帖子内容是否是需要出羽毛球场或转让羽毛球场。如果是，返回json {\"relevant\": true}，否则返回 {\"relevant\": false}。只返回json，不要返回其他内容。"},
-                {"role": "user", "content": content}
-            ]
-        )
-        result = json.loads(response.choices[0].message.content)
-        return result
-    except Exception as e:
-        print(f"OpenAI API调用失败: {e}")
-        return {"relevant": False}
+    if use_openai:
+        try:
+            response = await client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "你是一个助手，用于判断给定的帖子内容是否是需要出羽毛球场或转让羽毛球场。如果是，返回json {\"relevant\": true}，否则返回 {\"relevant\": false}。只返回json，不要返回其他内容。"},
+                    {"role": "user", "content": content}
+                ]
+            )
+            result = json.loads(response.choices[0].message.content)
+            return result
+        except Exception as e:
+            print(f"OpenAI API调用失败: {e}")
+            return {"relevant": False}
+    else:
+        keywords = ["羽球", "羽毛球", "球场"]
+        if any(keyword in content for keyword in keywords):
+            return {"relevant": True}
+        else:
+            return {"relevant": False}
 
 async def run_evaluator():
     evaluated_posts = {}

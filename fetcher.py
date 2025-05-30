@@ -72,12 +72,28 @@ def save_posts(posts, filename="treehole_posts.json"):
 async def run_fetcher():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
-        context = await browser.new_context()
+        
+        # Check if auth.json exists
+        if os.path.exists("auth.json"):
+            context = await browser.new_context(storage_state="auth.json")
+            print("🟢 已找到 auth.json，尝试使用登录状态...")
+        else:
+            context = await browser.new_context()
+            print("⚠️  未找到 auth.json，将打开浏览器进行登录...")
+
         page = await context.new_page()
 
-        print("🟢 正在打开树洞页面，请登录后按回车继续...")
         await page.goto("https://treehole.pku.edu.cn/web/")
-        input("🔑 登录完成后按回车以继续抓取帖子...")
+
+        # Check if already logged in
+        if await page.locator('text=退出').count() == 0:
+            print("🟢 正在打开树洞页面，请登录后按回车继续...")
+            input("🔑 登录完成后按回车以继续抓取帖子...")
+            # Save storage state to auth.json
+            await context.storage_state(path="auth.json")
+            print("💾 登录状态已保存到 auth.json")
+        else:
+            print("🟢 已登录，开始抓取帖子...")
 
         while True:
             print(f"🔁 正在刷新页面并抓取数据 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
