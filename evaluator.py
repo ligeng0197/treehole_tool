@@ -16,6 +16,7 @@ if use_openai:
 
 evaluated_posts_file = "evaluated_posts.json"
 max_posts = get_config("max_posts", 500)  # Use a default value if not found
+sleep_time = get_config("process_sleep_time", 60)
 
 async def evaluate(content):
     if use_openai:
@@ -33,7 +34,7 @@ async def evaluate(content):
             print(f"OpenAI API调用失败: {e}")
             return {"relevant": False}
     else:
-        keywords = ["羽球", "羽毛球", "球场"]
+        keywords = ["羽球", "羽毛球", "中羽"]
         if any(keyword in content for keyword in keywords):
             return {"relevant": True}
         else:
@@ -78,11 +79,11 @@ async def run_evaluator():
 
         if updated:
             # Limit the number of evaluated posts to the most recent 400
-            evaluated_posts = dict(list(evaluated_posts.items())[-400:])
+            evaluated_posts = dict(list(evaluated_posts.items())[-max_posts-100:])
             with open(evaluated_posts_file, "w", encoding="utf-8") as f:
                 json.dump(evaluated_posts, f, ensure_ascii=False, indent=2)
 
-        await asyncio.sleep(get_config("sleep_time", 60))
+        await asyncio.sleep(sleep_time)
 
 if __name__ == "__main__":
     asyncio.run(run_evaluator())

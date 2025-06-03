@@ -4,4 +4,6 @@ evaluated_posts.json
 treehole_posts.json
 sent_posts.json
 auth.json
+run.log
+sent_alerts.json
 

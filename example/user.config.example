@@ -2,6 +2,8 @@
   "use_openai": false,
   "openai_api_key": "sk-########################",
   "max_posts": 500,
-  "sleep_time": 60,
-  "wecom_robot_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=###############"
+  "fetch_sleep_time": 60,
+  "process_sleep_time": 5,
+  "wecom_robot_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=###############",
+  "alert_robot_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=###############"
 }

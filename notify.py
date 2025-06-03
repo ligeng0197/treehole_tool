@@ -8,7 +8,7 @@ from utils import get_config
 WECOM_ROBOT_URL = get_config("wecom_robot_url")
 SENT_POSTS_FILE ="sent_posts.json"
 MAX_SENT_POSTS = get_config("max_posts", 400)
-CHECK_INTERVAL = get_config("sleep_time", 60)  # seconds
+CHECK_INTERVAL = get_config("process_sleep_time", 60)  # seconds
 
 async def send_wecom_robot(content):
     headers = {"Content-Type": "application/json"}
@@ -87,10 +87,10 @@ async def check_and_notify():
         sent_posts.extend(new_sent_posts)
 
         # Keep only the most recent MAX_SENT_POSTS
-        sent_posts = sent_posts[-MAX_SENT_POSTS:]
+        sent_posts = sent_posts[-MAX_SENT_POSTS-200:]
         await save_sent_posts(sent_posts)
 
-        print(f"😴 Waiting for {CHECK_INTERVAL} seconds...")
+        print(f"😴 Notify Waiting for {CHECK_INTERVAL} seconds...")
         await asyncio.sleep(CHECK_INTERVAL)
 
 

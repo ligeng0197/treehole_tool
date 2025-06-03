@@ -95,13 +95,31 @@ async def run_fetcher():
         else:
             print("🟢 已登录，开始抓取帖子...")
 
+        empty_posts_count = 0  # Counter for consecutive empty posts
+        error_logged = False  # Flag to track if the error has been logged
+
         while True:
             print(f"🔁 正在刷新页面并抓取数据 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             await page.reload(wait_until="networkidle")
             posts = await extract_posts(page)
             saved_count = save_posts(posts)
             print(f"✅ 成功抓取并保存 {saved_count} 条帖子")
-            await asyncio.sleep(get_config("sleep_time", 60))
+
+            if not posts:
+                empty_posts_count += 1
+                print(f"⚠️  连续 {empty_posts_count} 次抓取到空帖子列表")
+                if empty_posts_count >= 3 and not error_logged:
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    error_message = f"[{timestamp}] [Error] 🚨 连续3次抓取到空帖子列表，请检查树洞是否正常！"
+                    print(error_message)
+                    with open("run.log", "a", encoding="utf-8") as log_file:
+                        log_file.write(error_message + "\n")
+                    error_logged = True  # Set the flag to True after logging
+            else:
+                empty_posts_count = 0  # Reset the counter if posts are found
+                error_logged = False # Reset the error flag if posts are found
+
+            await asyncio.sleep(get_config("fetch_sleep_time", 60))
 
 if __name__ == "__main__":
     asyncio.run(run_fetcher())
